@@ -58,3 +58,107 @@ Array.prototype.myEach = function(block) {
   };
 
 };
+
+Array.prototype.myMap = function(block) {
+
+  var result = [];
+  this.myEach(function(elem) {
+    result.push(block(elem));
+  });
+  return result;
+
+}
+
+Array.prototype.myInject = function(val, block) {
+
+  var accumulator = val
+  this.myEach(function(elem) {
+    accumulator = block(accumulator, elem)
+  });
+  return accumulator;
+}
+
+//-Iteration exercises
+
+Array.prototype.bubbleSort = function() {
+
+  var swapped = false;
+  do {
+    swapped = false;
+    for (var i = 0; i < this.length - 1; i++) {
+      if (this[i] > this[i + 1]) {
+        var temp = this[i];
+        this[i] = this[i + 1];
+        this[i + 1] = temp;
+
+        swapped = true;
+      }
+    };
+
+  } while (swapped);
+  return this;
+}
+
+String.prototype.substrings = function() {
+  var result = []
+  for (var i = 0; i < this.length; i++) {
+    for (var j = i; j < this.length; j++) {
+      result.push(this.substring(i, j+1))
+    };
+  };
+  return result;
+
+};
+
+// Recursion
+
+var exponent1 = function(base, exp) {
+  if (exp == 0){
+    return 1;
+  }
+  return base * exponent(base, exp - 1);
+}
+
+
+var exponent2 = function(base, exp) {
+  if (exp == 0){
+    return 1;
+  }
+  else if (base % 2 === 0) {
+    var result = exponent(base, exp / 2);
+    return result * result;
+  }
+  else {
+    var result = exponent(base, (exp - 1) / 2);
+    return base * result * result;
+  }
+};
+
+
+var fib = function(num) {
+  if (num === 1) {
+    return [0];
+  }
+  else if (num === 2) {
+    return [0, 1];
+  }
+
+  var fibs = fib(num - 1);
+  fibs.push(fibs[fibs.length-2] + fibs[fibs.length-1]);
+  return fibs;
+};
+
+var bsearch = function(array, target) {
+  var offset = 0;
+  var middle = Math.floor(array.length/2);
+
+  if (array[middle] === target) {
+    return middle;
+  } else if (middle === 0) {
+    return NaN;
+  } else if (target > array[middle]) {
+    return middle + bsearch(array.slice(middle, array.length), target);
+  } else {
+    return offset + bsearch(array.slice(0, middle), target);
+  }
+};
