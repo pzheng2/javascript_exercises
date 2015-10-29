@@ -162,3 +162,67 @@ var bsearch = function(array, target) {
     return offset + bsearch(array.slice(0, middle), target);
   }
 };
+
+var makeChange = function(target, options) {
+  if (target === options[0]) {
+    return [options[0]];
+  }
+
+  if (target > options[0]) {
+    var leftover = target - options[0];
+    var wallet = [options[0]];
+    return wallet.concat(makeChange(leftover, options));
+  } else {
+    var new_options = options.slice(1, options.length)
+    return makeChange(target, new_options)
+  }
+
+}
+
+var makeBestChange = function(target, options) {
+  var bestWallet = [], lowestCoins = null, wallet = [], coins = 0;
+  for (var i = 0; i < options.length; i++) {
+    wallet = makeChange(target, options.slice(i, options.length));
+    coins = wallet.length;
+    if (lowestCoins === null || lowestCoins > coins) {
+      lowestCoins = coins;
+      bestWallet = wallet;
+    }
+  };
+
+  return bestWallet;
+}
+
+
+var merge = function(firstHalf, secondHalf) {
+  var mergedArr = [];
+  while (firstHalf.length > 0 && secondHalf.length > 0) {
+    if (firstHalf[0] === secondHalf[0]) {
+      mergedArr.push(firstHalf[0]);
+      firstHalf.shift();
+    } else if (firstHalf[0] < secondHalf[0]) {
+      mergedArr.push(firstHalf[0]);
+      firstHalf.shift();
+    } else {
+      mergedArr.push(secondHalf[0]);
+      secondHalf.shift();
+    }
+  };
+
+  mergedArr = mergedArr.concat(firstHalf).concat(secondHalf);
+  return mergedArr;
+};
+
+
+var mergeSort = function(arr) {
+  if (arr.length <= 1) {
+    return arr;
+  }
+
+  var middle = Math.floor(arr.length/2);
+  var firstHalf = mergeSort(arr.slice(0, middle));
+  var secondHalf = mergeSort(arr.slice(middle, arr.length));
+  debugger
+  var mergedArr = merge(firstHalf, secondHalf)
+  return mergedArr;
+};
